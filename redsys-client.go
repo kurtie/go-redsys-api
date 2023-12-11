@@ -22,7 +22,10 @@ func (r *Redsys) CreateMerchantParameters(data *MerchantParametersRequest) strin
 func (r *Redsys) DecodeMerchantParameters(data string) MerchantParametersResponse {
 	merchantParameters := MerchantParametersResponse{}
 	decodedB64, _ := base64.URLEncoding.DecodeString(data)
-	unscaped, _ := url.QueryUnescape(string(decodedB64))
+	unscaped, err := url.QueryUnescape(string(decodedB64))
+	if err != nil {
+		unscaped = string(decodedB64)
+	}
 	json.Unmarshal([]byte(unscaped), &merchantParameters)
 	return merchantParameters
 }
